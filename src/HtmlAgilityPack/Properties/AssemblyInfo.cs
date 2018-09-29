@@ -1,11 +1,14 @@
 // HtmlAgilityPack V1.0 - Simon Mourier <simon underscore mourier at hotmail dot com>
+
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 
+[assembly: CLSCompliant(true)]
 #if DEBUG
-
+// Assembly marked as compliant.
 [assembly: AssemblyTitle("Html Agility Pack - Debug")] //Description
 #else // release
 #if TRACE
@@ -18,15 +21,15 @@ using System.Security;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ZZZ Projects Inc.")]
 [assembly: AssemblyProduct("Html Agility Pack")]
-[assembly: AssemblyCopyright("Copyright © ZZZ Projects Inc. 2014 - 2017")]
+[assembly: AssemblyCopyright("Copyright © ZZZ Projects Inc.")]
 [assembly: AssemblyTrademark("SQL & .NET Tools")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(true)]
 [assembly: Guid("643622ea-d2aa-4572-a2b2-6202b7fcd83f")]
-[assembly: AssemblyVersion("1.5.1")]
+[assembly: AssemblyVersion("1.8.0")]
 #if !PocketPC
-[assembly: AssemblyFileVersion("1.5.1")]
-[assembly: AssemblyInformationalVersion("1.5.1")]
+[assembly: AssemblyFileVersion("1.8.0")]
+[assembly: AssemblyInformationalVersion("1.8.0")]
 #if !SILVERLIGHT
 [assembly: AllowPartiallyTrustedCallers]
 #endif

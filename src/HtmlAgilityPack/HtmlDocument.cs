@@ -1046,7 +1046,7 @@ namespace HtmlAgilityPack
             switch (name)
             {
                 case "li":
-                    return new string[] {"ul"};
+                    return new string[] {"ul", "ol"};
 
                 case "tr":
                     return new string[] {"table"};
@@ -1720,7 +1720,7 @@ namespace HtmlAgilityPack
 						if (_declaredencoding.WebName != _streamencoding.WebName)
 #else
                         if (_declaredencoding != null)
-                            if (_declaredencoding.WindowsCodePage != _streamencoding.WindowsCodePage)
+                            if (_declaredencoding.CodePage != _streamencoding.CodePage)
 #endif
                             {
                                 AddError(

@@ -1,10 +1,19 @@
-// HtmlAgilityPack V1.0 - Simon Mourier <simon underscore mourier at hotmail dot com>
+// Description: Html Agility Pack - HTML Parsers, selectors, traversors, manupulators.
+// Website & Documentation: http://html-agility-pack.net
+// Forum & Issues: https://github.com/zzzprojects/html-agility-pack
+// License: https://github.com/zzzprojects/html-agility-pack/blob/master/LICENSE
+// More projects: http://www.zzzprojects.com/
+// Copyright © ZZZ Projects Inc. 2014 - 2017. All rights reserved.
+
+#if !METRO
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+
 #pragma warning disable 0649
 namespace HtmlAgilityPack
 {
@@ -37,10 +46,12 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("currentNode");
             }
+
             if (currentNode.OwnerDocument != doc)
             {
                 throw new ArgumentException(HtmlDocument.HtmlExceptionRefNotChild);
             }
+
             InternalTrace(null);
 
             _doc = doc;
@@ -54,6 +65,7 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("nav");
             }
+
             InternalTrace(null);
 
             _doc = nav._doc;
@@ -129,7 +141,7 @@ namespace HtmlAgilityPack
             Reset();
         }
 
-#if !NETSTANDARD
+#if !(NETSTANDARD1_3 || NETSTANDARD1_6)
         /// <summary>
         /// Initializes a new instance of the HtmlNavigator and loads an HTML document from a file.
         /// </summary>
@@ -187,9 +199,10 @@ namespace HtmlAgilityPack
             Reset();
         }
 #endif
-#endregion
 
-#region Properties
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets the base URI for the current node.
@@ -269,6 +282,7 @@ namespace HtmlAgilityPack
                     InternalTrace("att>" + _currentnode.Attributes[_attindex].Name);
                     return _nametable.GetOrAdd(_currentnode.Attributes[_attindex].Name);
                 }
+
                 InternalTrace("node>" + _currentnode.Name);
                 return _nametable.GetOrAdd(_currentnode.Name);
             }
@@ -333,15 +347,16 @@ namespace HtmlAgilityPack
                         return XPathNodeType.Text;
 
                     case HtmlNodeType.Element:
+                    {
+                        if (_attindex != -1)
                         {
-                            if (_attindex != -1)
-                            {
-                                InternalTrace(">" + XPathNodeType.Attribute);
-                                return XPathNodeType.Attribute;
-                            }
-                            InternalTrace(">" + XPathNodeType.Element);
-                            return XPathNodeType.Element;
+                            InternalTrace(">" + XPathNodeType.Attribute);
+                            return XPathNodeType.Attribute;
                         }
+
+                        InternalTrace(">" + XPathNodeType.Element);
+                        return XPathNodeType.Element;
+                    }
 
                     default:
                         throw new NotImplementedException("Internal error: Unhandled HtmlNodeType: " +
@@ -386,14 +401,15 @@ namespace HtmlAgilityPack
                         return ((HtmlTextNode) _currentnode).Text;
 
                     case HtmlNodeType.Element:
+                    {
+                        if (_attindex != -1)
                         {
-                            if (_attindex != -1)
-                            {
-                                InternalTrace(">" + _currentnode.Attributes[_attindex].Value);
-                                return _currentnode.Attributes[_attindex].Value;
-                            }
-                            return _currentnode.InnerText;
+                            InternalTrace(">" + _currentnode.Attributes[_attindex].Value);
+                            return _currentnode.Attributes[_attindex].Value;
                         }
+
+                        return _currentnode.InnerText;
+                    }
 
                     default:
                         throw new NotImplementedException("Internal error: Unhandled HtmlNodeType: " +
@@ -415,9 +431,9 @@ namespace HtmlAgilityPack
             }
         }
 
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// Creates a new HtmlNavigator positioned at the same node as this HtmlNavigator.
@@ -444,6 +460,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">null");
                 return null;
             }
+
             InternalTrace(">" + att.Value);
             return att.Value;
         }
@@ -473,6 +490,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             InternalTrace(">" + (nav._currentnode == _currentnode));
             return (nav._currentnode == _currentnode);
         }
@@ -490,9 +508,10 @@ namespace HtmlAgilityPack
                 InternalTrace(">false (nav is not an HtmlNodeNavigator)");
                 return false;
             }
+
             InternalTrace("moveto oid=" + nav.GetHashCode()
-                          + ", n:" + nav._currentnode.Name
-                          + ", a:" + nav._attindex);
+                                        + ", n:" + nav._currentnode.Name
+                                        + ", a:" + nav._attindex);
 
             if (nav._doc == _doc)
             {
@@ -501,6 +520,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">true");
                 return true;
             }
+
             // we don't know how to handle that
             InternalTrace(">false (???)");
             return false;
@@ -521,6 +541,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _attindex = index;
             InternalTrace(">true");
             return true;
@@ -537,11 +558,13 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             if (_currentnode.ParentNode.FirstChild == null)
             {
                 InternalTrace(">false");
                 return false;
             }
+
             _currentnode = _currentnode.ParentNode.FirstChild;
             InternalTrace(">true");
             return true;
@@ -558,6 +581,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _attindex = 0;
             InternalTrace(">true");
             return true;
@@ -574,6 +598,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _currentnode = _currentnode.ChildNodes[0];
             InternalTrace(">true");
             return true;
@@ -605,6 +630,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _currentnode = node;
             InternalTrace(">true");
             return true;
@@ -633,6 +659,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             InternalTrace("_c=" + _currentnode.CloneNode(false).OuterHtml);
             InternalTrace("_n=" + _currentnode.NextSibling.CloneNode(false).OuterHtml);
             _currentnode = _currentnode.NextSibling;
@@ -652,6 +679,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _attindex++;
             InternalTrace(">true");
             return true;
@@ -680,6 +708,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _currentnode = _currentnode.ParentNode;
             InternalTrace(">true");
             return true;
@@ -696,6 +725,7 @@ namespace HtmlAgilityPack
                 InternalTrace(">false");
                 return false;
             }
+
             _currentnode = _currentnode.PreviousSibling;
             InternalTrace(">true");
             return true;
@@ -710,9 +740,9 @@ namespace HtmlAgilityPack
             InternalTrace(null);
         }
 
-#endregion
+        #endregion
 
-#region Internal Methods
+        #region Internal Methods
 
         [Conditional("TRACE")]
         internal void InternalTrace(object traceValue)
@@ -722,7 +752,7 @@ namespace HtmlAgilityPack
                 return;
             }
 
-#if !NETSTANDARD
+#if !(NETSTANDARD1_3 || NETSTANDARD1_6)
             StackFrame sf = new StackFrame(1);
             string name = sf.GetMethod().Name;
 #else
@@ -755,13 +785,13 @@ namespace HtmlAgilityPack
                         break;
                 }
             }
-           
+
             HtmlAgilityPack.Trace.WriteLine(string.Format("oid={0},n={1},a={2},v={3},{4}", GetHashCode(), nodename, _attindex, nodevalue, traceValue), "N!" + name);
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private void Reset()
         {
@@ -770,6 +800,7 @@ namespace HtmlAgilityPack
             _attindex = -1;
         }
 
-#endregion
+        #endregion
     }
 }
+#endif
